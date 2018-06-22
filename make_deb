@@ -134,17 +134,17 @@ echo -n "Populating the package and updating version in control file..."
 cd "${package_name}"
 cp -R ${GIT_ROOT}/packages/Debian/common/* .
 cp -R ${GIT_ROOT}/packages/Debian/${architecture}/* .
-sed -i "s/Version: 0.0/Version: $version/g" DEBIAN/control
+sed -i "s/Version: 1.0.0/Version: $VERSION/g" DEBIAN/control
+
+# Copy build artifacts for nginx webroot directory
+mkdir -p var/www/html
+cp -R ${GIT_ROOT}/foglamp-gui/dist/* var/www/html/
 mkdir -p usr/local/foglamp
 cd usr/local/foglamp
 # copy south plugin files
 cp -R ${GIT_ROOT}/foglamp-south-${south_plugin}/python .
 cp -R ${GIT_ROOT}/foglamp-south-${south_plugin}/VERSION.south.${south_plugin} .
 cp -R ${FOGLAMP_ROOT}/* .
-# Copy build artifacts for nginx webroot directory
-mkdir -p var/www/html
-cd var/www/html
-cp -R ${GIT_ROOT}/foglamp-gui/dist/* .
 echo "Done."
 
 # Prepare new data directory
