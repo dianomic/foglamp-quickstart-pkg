@@ -29,7 +29,7 @@ usage="$(basename "$0") {x86|arm} [clean|cleanall]
 This script is used to create the Debian package of FogLAMP QuickStart
 Arguments: 
  x86      - Build an x86_64 package
- arm      - Build an armhf package
+ arm      - Build an armv7l package
  clean    - Remove all the old versions saved in format .XXXX
  cleanall - Remove all the versions, including the last one"
 
