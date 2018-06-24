@@ -10,21 +10,6 @@ Packaging Project for FogLAMP QuickStart
 This repo contains the scripts used to create a FogLAMP QuickStart package.
 
 
-The make_deb Script
-===================
-
-.. code-block:: console
-
-   $ ./make_deb --help
-   make_deb {x86|arm} [clean|cleanall]
-   This script is used to create the Debian package of FogLAMP QuickStart
-   Arguments:
-     x86      - Build an x86_64 package
-     arm      - Build an armv7l package
-     clean    - Remove all the old versions saved in format .XXXX
-     cleanall - Remove all the versions, including the last one
-
-
 Building QuickStart Package
 ===========================
 
@@ -60,6 +45,44 @@ Building QuickStart Package
     .. note:: If you are lazy enough, just run ``./prerequisite``, it will do the magic for all the above (4) steps! see ``./prerequisite --help`` for more options.
 
 * Run the ``./make_deb {x86|arm}`` command, the package will be placed in ``packages/Debian/build/``
+
+The make_deb Script
+===================
+
+.. code-block:: console
+
+   $ ./make_deb --help
+   make_deb {x86|arm} [clean|cleanall]
+   This script is used to create the Debian package of FogLAMP QuickStart
+   Arguments:
+     x86      - Build an x86_64 package
+     arm      - Build an armv7l package
+     clean    - Remove all the old versions saved in format .XXXX
+     cleanall - Remove all the versions, including the last one
+
+
+.. code-block:: console
+
+    $ ./make_deb arm
+    The package root directory is                    : /home/foglamp/foglamp-quickstart-pkg
+    The FogLAMP QuickStart version is                : 1.0.0
+    The FogLAMP directory is                         : /home/foglamp/FogLAMP
+    The FogLAMP version is                           : 1.2
+    The FogLAMP GUI version is                       : 1.2.0
+    The FogLAMP south plugin sinusoid version is     : 1.0.0
+    The Package will be built in                     : /home/foglamp/foglamp-quickstart-pkg/packages/Debian/build
+    The architecture is set as                       : armhf
+    The package name is                              : foglamp-quickstart-1.0.0-armhf
+
+    Populating the package and updating version in control file...Done.
+    Prepare data directory
+    Building the new package...
+    dpkg-deb: building package 'foglamp-quickstart' in 'foglamp-quickstart-1.0.0-armhf.deb'.
+    Building Complete.
+
+
+Installing QuickStart Package
+=============================
 
 * Install the debian package via ``sudo dpkg -i foglamp-quickstart-<ver>-<arch>.deb``
 
