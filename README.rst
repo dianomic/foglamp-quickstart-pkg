@@ -166,7 +166,7 @@ You can also check nginx service currently running:
 
 .. note:: Congratulations! This is all you need to do, FogLAMP-QuickStart is ready to run.
 
-   Access ``http://<raspberry.local>`` Or use IP of the machine on which quickstart debian package is installed.
+   Access ``http://raspberrypi.local`` Or use IP of the machine on which quickstart debian package is installed.
 
 
 Uninstalling the Debian Package
