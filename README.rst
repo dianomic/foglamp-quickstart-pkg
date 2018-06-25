@@ -34,7 +34,7 @@ Building QuickStart Package
      yes Y |  sudo apt-get install cmake g++ make build-essential autoconf automake
      yes Y |  sudo apt-get install libtool libboost-dev libboost-system-dev
      yes Y |  sudo apt-get install libboost-thread-dev libpq-dev libssl-dev
-     yes Y |  sudo apt-get install python-setuptools python3-dbus python3-dev
+     yes Y |  sudo apt-get install python3-setuptools python3-dbus python3-dev
      yes Y |  sudo apt-get install uuid-dev
      yes Y |  sudo apt-get install sqlite3 libsqlite3-dev
 
@@ -45,7 +45,7 @@ Building QuickStart Package
 
 * Make sure that FogLAMP is properly installed via ``make install`` somewhere on your environment (default ``FOGLAMP_ROOT`` path environment variable value is ``/usr/local/foglamp``).
 
-* Prepare foglamp-gui build artifacts via ``./build.sh`` inside the foglamp-gui repository
+* Prepare foglamp-gui build artifacts via ``./build --clean-start`` inside the foglamp-gui repository
 
     .. note:: If you are lazy enough, just run ``./prerequisite``, it will do the magic for all the above (4) steps! see ``./prerequisite --help`` for more options.
 
@@ -166,8 +166,7 @@ Check if FogLAMP is up and running with the ``foglamp`` command:
   FogLAMP does not require authentication.
   === FogLAMP services:
   foglamp.services.core
-  foglamp.services.south --port=46141 --address=127.0.0.1 --name=COAP
-  foglamp.services.south --port=46141 --address=127.0.0.1 --name=HTTP_SOUTH
+  foglamp.services.south --port=43927 --address=127.0.0.1 --name=sinusoid
   === FogLAMP tasks:
   $
 
@@ -178,13 +177,11 @@ You can also check nginx service currently running:
    $ sudo service nginx status | grep active 2>&1
          Active: active (running) since Mon 2018-06-25 06:52:42 UTC; 23min ago
 
-Check if foglamp-gui is up and listening on port 80
-
 .. code-block:: console
 
-  $ http://localhost:80
+  $ http://<raspberry.local> # IP
 
-...Congratulations! This is all you need to do, now FogLAMP-QuickStart is ready to run.
+Congratulations! This is all you need to do, FogLAMP-QuickStart is ready to run.
 
 
 

@@ -72,7 +72,7 @@ install_foglamp () {
 build_gui () {
     cd ${GIT_ROOT}/foglamp-gui
     rm -rf dist
-    ./build.sh
+    ./build --clean-start
     cd ..
 }
 
