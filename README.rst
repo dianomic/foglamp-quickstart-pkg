@@ -1,13 +1,3 @@
-Links
-
-* `foglamp`_
-* `foglamp-gui`_
-* `foglamp-south-plugin`_
-
-.. _foglamp: https://github.com/foglamp/FogLAMP
-.. _foglamp-gui: https://github.com/foglamp/foglamp-gui.git
-.. _foglamp-south-plugin: https://github.com/foglamp/foglamp-south-sinusoid.git
-
 ****************************************
 Packaging Project for FogLAMP QuickStart
 ****************************************
@@ -43,7 +33,7 @@ Building QuickStart Package
      yes Y | sudo apt-get install -y nodejs
      yes Y | sudo npm install -g yarn
 
-* Make sure that FogLAMP is properly installed via ``make install`` somewhere on your environment (default ``FOGLAMP_ROOT`` path environment variable value is ``/usr/local/foglamp``).
+* Make sure that FogLAMP is properly installed via ``make install`` somewhere on your environment (default path value for ``FOGLAMP_ROOT`` environment variable is ``/usr/local/foglamp``).
 
 * Prepare foglamp-gui build artifacts via ``./build --clean-start`` inside the foglamp-gui repository
 
@@ -73,23 +63,19 @@ The make_deb Script
     The FogLAMP QuickStart version is                : 1.0.0
     The FogLAMP directory is                         : /home/foglamp/FogLAMP
     The FogLAMP version is                           : 1.2
-    The FogLAMP GUI version is                       : 1.2.0
+    The FogLAMP GUI version is                       : 1.3.0
     The FogLAMP south plugin sinusoid version is     : 1.0.0
     The Package will be built in                     : /home/foglamp/foglamp-quickstart-pkg/packages/Debian/build
     The architecture is set as                       : armhf
     The package name is                              : foglamp-quickstart-1.0.0-armhf
 
-    Populating the package and updating version in control file...Done.
-    Prepare data directory
+    Populating the package and updating version in control file...
+    Done.
+    ...
     Building the new package...
     dpkg-deb: building package 'foglamp-quickstart' in 'foglamp-quickstart-1.0.0-armhf.deb'.
     Building Complete.
 
-Cleaning the Package Directory
-==============================
-* Use the ``clean`` option to remove all the old packages and the files used to make the package.
-
-* Use the ``cleanall`` option to remove all the packages and the files used to make the package.
 
 Installing QuickStart Package
 =============================
@@ -177,12 +163,10 @@ You can also check nginx service currently running:
    $ sudo service nginx status | grep active 2>&1
          Active: active (running) since Mon 2018-06-25 06:52:42 UTC; 23min ago
 
-.. code-block:: console
-
-  $ http://<raspberry.local> # IP
 
 Congratulations! This is all you need to do, FogLAMP-QuickStart is ready to run.
 
+> Access `http://<raspberry.local>` Or use IP of the machine on which quickstart debian package is installed.
 
 
 Uninstalling the Debian Package
@@ -200,7 +184,7 @@ Use the ``apt`` or the ``apt-get`` command to uninstall FogLAMP QuickStart:
       libboost-date-time1.62-dev libboost-date-time1.62.0 libboost-dev libboost-serialization1.62-dev libboost-serialization1.62.0
       libboost-system-dev libboost-system1.62-dev libboost-thread-dev libboost-thread1.62-dev libboost-thread1.62.0 libboost1.62-dev
       libdbus-glib-1-2 libexpat1-dev libjsoncpp1 liblzo2-2 libnginx-mod-http-echo libpq-dev libpq5 libpython3-dev libpython3.5-dev libsqlite3-dev
-      libssl-dev libuv1 nginx-common nginx-light python-pip-whl python-pkg-resources python-setuptools python3-dbus python3-dev python3-pip
+      libssl-dev libuv1 nginx-common nginx-light python-pip-whl python-pkg-resources python3-setuptools python3-dbus python3-dev python3-pip
       python3.5-dev sqlite3 uuid-dev
     Use 'sudo apt autoremove' to remove them.
     The following packages will be REMOVED:
@@ -208,24 +192,6 @@ Use the ``apt`` or the ``apt-get`` command to uninstall FogLAMP QuickStart:
     0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
     After this operation, 0 B of additional disk space will be used.
     Do you want to continue? [Y/n] Y
-    apt-listchanges: Can't set locale; make sure $LC_* and $LANG are correct!
-    perl: warning: Setting locale failed.
-    perl: warning: Please check that your locale settings:
-        LANGUAGE = (unset),
-        LC_ALL = (unset),
-        LC_TIME = "en_US.UTF-8",
-        LC_MONETARY = "en_US.UTF-8",
-        LC_ADDRESS = "en_US.UTF-8",
-        LC_TELEPHONE = "en_US.UTF-8",
-        LC_NAME = "en_US.UTF-8",
-        LC_MEASUREMENT = "en_US.UTF-8",
-        LC_IDENTIFICATION = "en_US.UTF-8",
-        LC_NUMERIC = "en_US.UTF-8",
-        LC_PAPER = "en_US.UTF-8",
-        LANG = "en_GB.UTF-8"
-        are supported and installed on your system.
-    perl: warning: Falling back to a fallback locale ("en_GB.UTF-8").
-    locale: Cannot set LC_ALL to default locale: No such file or directory
     (Reading database ... 51296 files and directories currently installed.)
     Removing foglamp-quickstart (1.0.0) ...
     dpkg-query: package 'foglamp' is not installed
@@ -239,3 +205,9 @@ Use the ``apt`` or the ``apt-get`` command to uninstall FogLAMP QuickStart:
     Reset systemctl
     Stop nginx service
     dpkg: warning: while removing foglamp-quickstart, directory '/usr/local/foglamp' not empty so not removed
+
+Cleaning the Package Directory
+==============================
+* Use the ``clean`` option to remove all the old packages and the files used to make the package.
+
+* Use the ``cleanall`` option to remove all the packages and the files used to make the package.
