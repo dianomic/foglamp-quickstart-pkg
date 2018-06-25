@@ -10,3 +10,8 @@
 
 # Build
 packages/Debian/build/
+
+# Repo
+FogLAMP
+foglamp-gui
+foglamp-south-*

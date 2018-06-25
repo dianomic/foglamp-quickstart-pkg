@@ -27,7 +27,7 @@ GIT_ROOT=`pwd`    # The script must be executed from the root git directory
 architecture="none"
 usage="$(basename "$0") {x86|arm} [clean|cleanall]
 This script is used to create the Debian package of FogLAMP QuickStart
-Arguments: 
+Arguments:
  x86      - Build an x86_64 package
  arm      - Build an armv7l package
  clean    - Remove all the old versions saved in format .XXXX
@@ -62,14 +62,18 @@ then
               fi
               shift
               ;;
-          *)
+          help)
               echo "${usage}"
               exit 1
               ;;
+          *)
+            echo "Unrecognized option: $i"
+            exit 1
+            ;;
       esac
     done
 else
-  echo "select the architecture to use, *x86* or *arm*"
+  echo "See help and select the architecture to use, *x86* or *arm*"
 fi
 
 # If the architecture has not been defined, then the script is complete
