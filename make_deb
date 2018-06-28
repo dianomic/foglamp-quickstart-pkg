@@ -1,0 +1,181 @@
+#!/bin/bash
+
+##--------------------------------------------------------------------
+## Copyright (c) 2018 Dianomic Systems
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##     http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##--------------------------------------------------------------------
+##
+## Author: Ivan Zoratti, Ashish Jabble
+##
+
+
+set -e
+
+GIT_ROOT=`pwd`    # The script must be executed from the root git directory
+
+architecture="none"
+usage="$(basename "$0") {x86|arm} [clean|cleanall]
+This script is used to create the Debian package of FogLAMP QuickStart
+Arguments:
+ x86      - Build an x86_64 package
+ arm      - Build an armv7l package
+ clean    - Remove all the old versions saved in format .XXXX
+ cleanall - Remove all the versions, including the last one"
+
+if [ $# -gt 0 ]
+then
+    for i in "$@"
+    do
+      case "$i" in
+          x86)
+              architecture="x86_64"
+              shift
+              ;;
+          arm)
+              architecture="armhf"
+              shift
+              ;;
+          clean)
+              echo -n "Cleaning the build folder from older versions..."
+              find "${GIT_ROOT}/packages/Debian/build" -maxdepth 1 | grep '.*\.[0-9][0-9][0-9][0-9]' | xargs rm -rf
+              echo "Done."
+              shift
+              ;;
+          cleanall)
+              if [ -d "${GIT_ROOT}/packages/Debian/build" ]; then
+                echo -n "Cleaning the build folder..."
+                rm -rf ${GIT_ROOT}/packages/Debian/build/*
+                echo "Done."
+              else
+                echo "No build folder, skipping cleanall"
+              fi
+              shift
+              ;;
+          help)
+              echo "${usage}"
+              exit 1
+              ;;
+          *)
+            echo "Unrecognized option: $i"
+            exit 1
+            ;;
+      esac
+    done
+else
+  echo "See help and select the architecture to use, *x86* or *arm*"
+fi
+
+# If the architecture has not been defined, then the script is complete
+if [[ "$architecture" == "none" ]]; then
+  exit 0
+fi
+
+# Check FOGLAMP_ROOT
+if [ -z ${FOGLAMP_ROOT+x} ]; then
+    # Set FOGLAMP_ROOT as the default directory
+    if [ -d "/usr/local/foglamp" ]; then
+      FOGLAMP_ROOT="/usr/local/foglamp"
+      export FOGLAMP_ROOT
+    else
+      echo "No FOGLAMP_ROOT directory found - Program exit."
+      exit 1
+    fi
+fi
+
+south_plugin='sinusoid'
+VERSION=`cat ${GIT_ROOT}/VERSION.foglamp.quickstart | tr -d ' ' | grep 'foglamp_quickstart_version=' | head -1 | sed -e 's/\(.*\)=\(.*\)/\2/g'`
+FOGLAMP_VERSION=`cat ${FOGLAMP_ROOT}/VERSION | tr -d ' ' | grep 'foglamp_version=' | head -1 | sed -e 's/\(.*\)=\(.*\)/\2/g'`
+BUILD_ROOT="${GIT_ROOT}/packages/Debian/build"
+FOGLAMP_GUI_VERSION=`cat ${GIT_ROOT}/foglamp-gui/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[" ,]//g'`
+SOUTH_PLUGIN_VERSION=`cat ${GIT_ROOT}/foglamp-south-${south_plugin}/VERSION.south.${south_plugin} | tr -d ' ' | grep "foglamp_south_${south_plugin}_version=" | head -1 | sed -e 's/\(.*\)=\(.*\)/\2/g'`
+
+# Final package name
+package_name="foglamp-quickstart-${VERSION}-${architecture}"
+
+# Print the summary of findings
+echo "The package root directory is                           : ${GIT_ROOT}"
+echo "The FogLAMP QuickStart version is                       : ${VERSION}"
+echo "The FogLAMP directory is                                : ${FOGLAMP_ROOT}"
+echo "The FogLAMP version is                                  : ${FOGLAMP_VERSION}"
+echo "The FogLAMP GUI version is                              : ${FOGLAMP_GUI_VERSION}"
+echo "The FogLAMP south plugin ${south_plugin} version is     : ${SOUTH_PLUGIN_VERSION}"
+echo "The Package will be built in                            : ${BUILD_ROOT}"
+echo "The architecture is set as                              : ${architecture}"
+echo "The package name is                                     : ${package_name}"
+echo
+
+# Create the package directory. If a directory with the same name exists,
+# it is copied with a version number.
+
+# First, create the BUILD_ROOT folder, if necessary
+if [ ! -L "${BUILD_ROOT}" -a ! -d "${BUILD_ROOT}" ]; then
+    mkdir -p "${BUILD_ROOT}"
+fi
+
+cd "${BUILD_ROOT}"
+existing_pkgs=`find . -maxdepth 1 -name "${package_name}.????" | wc -l`
+existing_pkgs=$((existing_pkgs+1))
+new_stored_pkg=$(printf "${package_name}.%04d" "${existing_pkgs}")
+if [ -d "${package_name}" ]; then
+    echo "Saving the old working environment as ${new_stored_pkg}"
+    mv "${package_name}" "${new_stored_pkg}"
+fi
+mkdir "${package_name}"
+
+# Populate the package directory with Debian files
+echo -n "Populating the package and updating version in control file..."
+cd "${package_name}"
+cp -R ${GIT_ROOT}/packages/Debian/common/* .
+cp -R ${GIT_ROOT}/packages/Debian/${architecture}/* .
+sed -i "s/Version: 1.0.0/Version: $VERSION/g" DEBIAN/control
+
+# Copy build artifacts for nginx webroot directory
+mkdir -p var/www/html
+cp -R ${GIT_ROOT}/foglamp-gui/dist/* var/www/html/
+mkdir -p usr/local/foglamp
+cd usr/local/foglamp
+# copy south plugin files
+cp -R ${GIT_ROOT}/foglamp-south-${south_plugin}/python .
+cp -R ${GIT_ROOT}/foglamp-south-${south_plugin}/VERSION.south.${south_plugin} .
+cp -R ${FOGLAMP_ROOT}/* .
+echo "Done."
+
+# Prepare new data directory
+echo "Prepare data directory"
+mv data data.new
+cd data.new
+rm -rf core.err
+rm -rf etc/certs/*
+rm -rf foglamp.db
+rm -rf var
+
+# Build the package
+cd "${BUILD_ROOT}"
+
+# Save the old versions
+existing_pkgs=`find . -maxdepth 1 -name "${package_name}.deb.????" | wc -l`
+existing_pkgs=$((existing_pkgs+1))
+new_stored_pkg=$(printf "${package_name}.deb.%04d" "${existing_pkgs}")
+
+if [ -e "${package_name}.deb" ]; then
+    echo "Saving the old package as ${new_stored_pkg}"
+    mv "${package_name}.deb" "${new_stored_pkg}"
+fi
+
+echo "Building the new package..."
+dpkg-deb --build ${package_name}
+echo "Building Complete."
+
+
+exit 0
