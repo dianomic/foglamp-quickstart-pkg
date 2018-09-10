@@ -3,7 +3,7 @@ Version: 1.0.0
 Section: devel
 Priority: optional
 Architecture: amd64
-Depends: curl,cmake,g++,make,build-essential,autoconf,automake,libtool,libboost-dev,libboost-system-dev,libboost-thread-dev,libpq-dev,libssl-dev,python3-setuptools,python3-dbus,python3-dev,python3-pip,uuid-dev,sqlite3,libsqlite3-dev,nginx-light
+Depends: curl,cmake,g++,make,build-essential,autoconf,automake,libtool,libboost-dev,libboost-system-dev,libboost-thread-dev,libssl-dev,python3-setuptools,python3-dbus,python3-dev,python3-pip,uuid-dev,sqlite3,libsqlite3-dev,nginx-light
 Conflicts:
 Maintainer: Dianomic Systems, Inc. <info@dianomic.com>
 Homepage: http://www.dianomic.com
