@@ -37,7 +37,7 @@ install_deps () {
     yes Y |  sudo apt-get install curl
 
     yes Y |  sudo apt-get install cmake g++ make build-essential autoconf automake
-    yes Y |  sudo apt-get install libtool libboost-dev libboost-system-dev libboost-thread-dev libpq-dev libssl-dev
+    yes Y |  sudo apt-get install libtool libboost-dev libboost-system-dev libboost-thread-dev libssl-dev
     yes Y |  sudo apt-get install python-setuptools python3-dbus python3-dev python3-pip
 
     yes Y |  sudo apt-get install uuid-dev
@@ -60,7 +60,7 @@ remove_repos () {
 clone_repos () {
     git clone -b develop --single-branch https://github.com/foglamp/FogLAMP.git
     git clone -b develop --single-branch https://github.com/foglamp/foglamp-gui.git
-    git clone https://github.com/foglamp/foglamp-south-sinusoid.git
+    git clone -b develop --single-branch https://github.com/foglamp/foglamp-south-sinusoid.git
 }
 
 install_foglamp () {

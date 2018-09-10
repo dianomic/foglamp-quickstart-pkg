@@ -14,7 +14,7 @@ Building QuickStart Package
 
      git clone -b develop --single-branch https://github.com/foglamp/foglamp-gui.git
      git clone -b develop --single-branch https://github.com/foglamp/FogLAMP.git
-     git clone https://github.com/foglamp/foglamp-south-sinusoid.git
+     git clone -b develop --single-branch https://github.com/foglamp/foglamp-south-sinusoid.git
 
 * Install dependencies
 
@@ -23,7 +23,7 @@ Building QuickStart Package
      yes Y |  sudo apt-get install curl
      yes Y |  sudo apt-get install cmake g++ make build-essential autoconf automake
      yes Y |  sudo apt-get install libtool libboost-dev libboost-system-dev
-     yes Y |  sudo apt-get install libboost-thread-dev libpq-dev libssl-dev
+     yes Y |  sudo apt-get install libboost-thread-dev libssl-dev
      yes Y |  sudo apt-get install python3-setuptools python3-dbus python3-dev
      yes Y |  sudo apt-get install uuid-dev
      yes Y |  sudo apt-get install sqlite3 libsqlite3-dev
@@ -75,6 +75,16 @@ The make_deb Script
     Building the new package...
     dpkg-deb: building package 'foglamp-quickstart' in 'foglamp-quickstart-1.0.0-armhf.deb'.
     Building Complete.
+
+.. warning::
+
+  Postgres dependencies will not be installed automatically.
+  In order to use postgres storage engine, you will need manual installation of `libpq-dev` and `postgresql`.
+
+    .. code-block:: console
+
+       yes Y | sudo apt install libpq-dev
+       yes Y | sudo apt install postgresql
 
 
 Installing QuickStart Package
@@ -183,7 +193,7 @@ Use the ``apt`` or the ``apt-get`` command to uninstall FogLAMP QuickStart:
       cmake cmake-data libarchive13 libboost-atomic1.62-dev libboost-atomic1.62.0 libboost-chrono1.62-dev libboost-chrono1.62.0
       libboost-date-time1.62-dev libboost-date-time1.62.0 libboost-dev libboost-serialization1.62-dev libboost-serialization1.62.0
       libboost-system-dev libboost-system1.62-dev libboost-thread-dev libboost-thread1.62-dev libboost-thread1.62.0 libboost1.62-dev
-      libdbus-glib-1-2 libexpat1-dev libjsoncpp1 liblzo2-2 libnginx-mod-http-echo libpq-dev libpq5 libpython3-dev libpython3.5-dev libsqlite3-dev
+      libdbus-glib-1-2 libexpat1-dev libjsoncpp1 liblzo2-2 libnginx-mod-http-echo libpq5 libpython3-dev libpython3.5-dev libsqlite3-dev
       libssl-dev libuv1 nginx-common nginx-light python-pip-whl python-pkg-resources python3-setuptools python3-dbus python3-dev python3-pip
       python3.5-dev sqlite3 uuid-dev
     Use 'sudo apt autoremove' to remove them.
